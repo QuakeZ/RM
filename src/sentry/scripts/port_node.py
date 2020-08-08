@@ -110,7 +110,9 @@ while not rospy.is_shutdown():
         #twist = Twist()
     except:
         None
-send_chassis(0,0,0)
+
+send_command(0,0,0)
+send_state_order(0)
 ser.close
 
 #关闭节点时先按control-s再按control-c

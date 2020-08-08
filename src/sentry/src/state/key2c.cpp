@@ -23,11 +23,10 @@ private:
   ros::NodeHandle nh_;
   int linear, angular, l_scale_, a_scale_;
   ros::Publisher has_pub_;
-  ros::Publisher has_pri_;
   
 };
 
-TeleopTurtle::TeleopTurtle():  
+TeleopTurtle::TeleopTurtle():
   linear(1),
   angular(1),
   l_scale_(1),
@@ -36,19 +35,16 @@ TeleopTurtle::TeleopTurtle():
   nh_.param("scale_angular", a_scale_, a_scale_);
   nh_.param("scale_linear", l_scale_, l_scale_);
 
-  has_pub_ = nh_.advertise<sentry::Has>("has_info", 1);
-  has_pri_ = nh_.advertise<sentry::Has>("has_pri",1);
+  has_pub_ = nh_.advertise<sentry::Has>("has_info", 1);//发布的消息 固定格式
 }
 
-int kfd = 0;
+int kfd = 0;//定义 kfd 作用：文件描述符
 struct termios cooked, raw;
-
 
 void quit(int sig)
 {
   (void)sig;
   tcsetattr(kfd, TCSANOW, &cooked);
-
   
   ros::shutdown();//关闭节点
   exit(0);//终止进程
@@ -57,72 +53,73 @@ void quit(int sig)
 //主函数//
 int main(int argc, char** argv)
 {
-  ros::init(argc, argv, "key1");
-  TeleopTurtle teleop_turtle;
+  ros::init(argc, argv, "key2c");//ROS初始化
+  TeleopTurtle teleop_turtle;//定义 TeleopTurtle类 的 teleop_turtle
 
-  signal(SIGINT,quit);
+  signal(SIGINT,quit);//相当于规定Ctrl+C的退出方式
+                      //当收到 SIGINT 信号 就调用quit（）函数
 
-  teleop_turtle.keyLoop();
-  quit(0);
+  teleop_turtle.keyLoop();//调用 keyLoop()函数
+  quit(0);//调用quit函数 结束进程
   
   return(0);
 }
 
-
-void TeleopTurtle::keyLoop()
+void TeleopTurtle::keyLoop()//定义 用于键盘控制的函数
 {
   char c;
-  bool dirty=false;
-
-
-                                                 
+  bool dirty=false;//定义 布尔型dirty 作用：控制在对应按键被按下后发布消息
+    
   tcgetattr(kfd, &cooked);
   memcpy(&raw, &cooked, sizeof(struct termios));
-  raw.c_lflag &=~ (ICANON | ECHO);   
-  raw.c_cc[VEOL] = 1;
-  raw.c_cc[VEOF] = 2;
+  raw.c_lflag &=~ (ICANON | ECHO);// /* local mode flags */
+  // Setting a new line, then end of file                         
+  raw.c_cc[VEOL] = 1;//c_cc control characters VEOL 11
+  raw.c_cc[VEOF] = 2;//VEOF 4
   tcsetattr(kfd, TCSANOW, &raw);
 
-  puts("Reading from keyboard");
+  puts("Reading from keyboard");//puts()向标准输出设备（屏幕）输出字符串并换行 需要<stdio.h>
   puts("---------------------------");
   puts("Use arrow keys to move the turtle. 'q' to quit.");
 
 
-  for(;;)//无条件循环 
+  for(;;)
   {
-    
-    if(read(kfd, &c, 1) < 0)
+    // get the next event from the keyboard  
+    if(read(kfd, &c, 1) < 0)//如果已经读取到末尾，报错并退出
+                            
     {
-      perror("read():");
-      exit(-1);//退出程序 
+      perror("read():");//perror（）：输出括号内的内容并且输出系统错误信息 <stdio.h>
+      exit(-1);//退出程序 exit(0)表示程序正常退出，非0表示非正常退出
     }
 
-    //linear=angular=0;//线速度和角速度变量的初始化
+
     ROS_DEBUG("value: 0x%02X\n", c);
   
-    switch(c)
+    switch(c)//如果是规定的按键 就开启dirty 使发布者发布消息
     {
       case KEYCODE_L:
         ROS_DEBUG("LEFT");
-        angular = 1;
-        linear = 1;
+        angular = 1;//isAttacked
+        //linear = 1;
         dirty = true;
         break;
       case KEYCODE_R:
         ROS_DEBUG("RIGHT");
         angular = 0;
-        linear = 1;
+        //linear = 1;
         dirty = true;
         break;
       case KEYCODE_U:
         ROS_DEBUG("UP");
-        angular = 1;
-        linear = 0;
+        //angular = 1;
+        //linear = 0;
+        linear = 1;//hasfound
         dirty = true;
         break;
       case KEYCODE_D:
         ROS_DEBUG("DOWN");
-        angular = 0;
+        //angular = 0;
         linear = 0;
         dirty = true;
         break;
@@ -133,14 +130,11 @@ void TeleopTurtle::keyLoop()
    
 
     sentry::Has mss;//定义速度消息
-    mss.angular=angular;//设置 角速度信息 hasattack
-    mss.linear=linear;//设置 线速度信息 hasfound
-    sentry::Has msp;
-    msp.linear= linear;
-    if(dirty ==true)//dirty开启则 发布信息 然后dirty关闭
+    mss.angular=angular;//设置 角速度信息
+    mss.linear=linear;//设置 线速度信息
+    if(dirty == true)//dirty开启则 发布信息 然后dirty关闭
     {
-      has_pub_.publish(mss); 
-      has_pri_.publish(msp);  //发布消息  
+      has_pub_.publish(mss);//发布消息  
       dirty=false;//发布后关闭消息
     }
   }

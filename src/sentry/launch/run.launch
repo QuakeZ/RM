@@ -5,7 +5,7 @@
 	<master auto="start"/>
 
 	<!-- run key -->
-	<!--node pkg="sentry" type="key2c" name="key2c" /-->
+	<node pkg="sentry" type="key2att" name="key2att"/>
 
         <!-- run found_tk -->
 	<node pkg="sentry" type="found_tk" name="found_tk"/>		
