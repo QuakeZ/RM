@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+
+<launch> 
+	<!-- 启动roscore -->
+	<master auto="start"/>
+
+	
+	<!-- run key1 -->
+	<node pkg="sentry" type="key1" name="key1" />
+	<!-- run wo -->
+	<node pkg="sentry" type="ran_defend" name="ran_defend" launch-prefix="gnome-terminal -e"/>
+	<!--run test1-->
+	<node pkg="sentry" type="cruise" name="cruise" launch-prefix="gnome-terminal -e"/>
+	
+    	<!--run port_node-->
+	<node name="port_node" pkg="sentry" type="port_node.py" output="screen" launch-prefix="gnome-terminal -e" />
+
+	<!--run samch_Chassis3-->
+	<node name="smach_Chassis3" pkg="sentry" type="smach_Chassis3.py" output="screen" />
+	
+	
+
+</launch>
+

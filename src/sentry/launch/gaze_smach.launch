@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+
+<launch> 
+	<!-- 启动roscore -->
+	<master auto="start"/>
+
+	<!-- run gaze_random_move -->
+	<node pkg="sentry" type="gaze_random_move" name="gaze_random_move" launch-prefix="gnome-terminal -e"/>
+	<!--run gaze_cruise-->
+	<node pkg="sentry" type="gaze_cruise" name="gaze_cruise" output="screen" launch-prefix="gnome-terminal -e"/>
+	<!--run gaze_zhui-->
+	<node pkg="sentry" type="gaze_zhui" name="gaze_zhui" output="screen" launch-prefix="gnome-terminal -e" />
+
+	<!--run samch_Chassis2-->
+	<node name="smach_Chassis2" pkg="sentry" type="smach_Chassis2.py" output="screen"/>
+	<!-- run key1 -->
+	<node pkg="sentry" type="key1" name="key1" />
+
+</launch>
+

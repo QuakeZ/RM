@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+
+<launch> 
+	<!-- 启动roscore -->
+	<!--master auto="start"/-->
+
+	<!--run fake_odom-->
+	<node pkg="sentry" type="fake_odom" name="fake_odom" output="screen"/>
+
+	<!-- run gaze_cruise -->
+	<node pkg="sentry" type="gaze_cruise" name="gaze_cruise"/>
+	
+	<!-- run pos -->
+	<node pkg="sentry" type="pos" name="pos" output="screen" launch-prefix="gnome-terminal -e"/>
+	
+
+</launch>
+

@@ -1,0 +1,7 @@
+port_node 通信节点:
+input:name: chassis_cmd_vel  msg: twist
+output: robot_vel    msg: turtlesim Pose
+
+smach_Chassis2.py  状态控制
+input: has_info msg: has  (linear attacked(受击情况需要从裁判系统里抽调，这与步兵不同,remain the question briefly);angular hasfound 与识别hkvs line124建立接口)
+output: order_Chassis msg: Int8 对应不同的状态

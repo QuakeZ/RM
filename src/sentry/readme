@@ -1,0 +1,18 @@
+chassis_all.launch 是正式运行节点
+
+state:
+1.cruise是巡航
+2.zhui是追击(建立接口与position，话题名point_3d，msg:Point）(如果动打动不好就不要使用该模式！）
+3.coordinate 是随机运动 
+
+123 input: order_Chassis msg： Int8   ;  robot_pose  msg: turtlesim::Pose 
+output： Chassis_cmd_vel msg: twist
+
+zhui_tk.cpp 追击模拟坐标发布器
+
+pos:
+posuv.cpp 卡尔曼滤波定位
+input: robot_vel turtlesim Pose
+output：robot_pose
+
+pos_v1 topic: /chassis/position
