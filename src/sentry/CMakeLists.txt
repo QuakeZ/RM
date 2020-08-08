@@ -272,9 +272,9 @@ add_executable(found_tk src/state/found_tk.cpp)
 target_link_libraries(found_tk ${catkin_LIBRARIES})
 add_dependencies(found_tk ${${PROJECT_NAME}_EXPORTED_TARGETS})
 
-add_executable(key2p src/state/key2p.cpp)
-target_link_libraries(key2p ${catkin_LIBRARIES})
-add_dependencies(key2p ${${PROJECT_NAME}_EXPORTED_TARGETS})
+add_executable(key2att src/state/key2att.cpp)
+target_link_libraries(key2att ${catkin_LIBRARIES})
+add_dependencies(key2att ${${PROJECT_NAME}_EXPORTED_TARGETS})
 
 add_executable(key2c src/state/key2c.cpp)
 target_link_libraries(key2c ${catkin_LIBRARIES})
