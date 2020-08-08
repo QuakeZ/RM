@@ -29,7 +29,7 @@ catkin_package(
 ## Build ##
 ###########
 
-link_directories(/opt/MVS/lib/64)
+link_directories(/opt/MVS/lib/aarch64)
 include_directories(include
   ${catkin_INCLUDE_DIRS}
   ${avcodec_INCLUDE_DIRS}

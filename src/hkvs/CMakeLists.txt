@@ -37,7 +37,7 @@ include_directories(
 # include
 # ${catkin_INCLUDE_DIRS}
 )
-link_directories(/opt/MVS/lib/64)
+link_directories(/opt/MVS/lib/aarch64)
 
 
 add_executable(hkvs_pub
