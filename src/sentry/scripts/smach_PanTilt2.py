@@ -30,7 +30,7 @@ class Search(smach.State):
         rospy.loginfo('publish order:%d',order)
         rate = rospy.Rate(1)
         while(1):
-            rospy.Subscriber('has_info', Has, callback)
+            rospy.Subscriber('found_info', Has, callback)
             pub.publish(order)
             if hasfound == 1:
                order = 0
@@ -54,7 +54,7 @@ class Attack(smach.State):
         rospy.loginfo('publish order:%d',order)
         rate = rospy.Rate(1)
         while(1):
-            rospy.Subscriber('has_info', Has, callback)
+            rospy.Subscriber('found_info', Has, callback)
             pub.publish(order)
             if hasfound == 0:
                order = 0

@@ -16,11 +16,13 @@ SAFECOUNT=5
 
 pub = rospy.Publisher('order_Chassis', Int8, queue_size=10)
 
-def callback(msg):    
+def foundcallback(msgf):    
     global hasfound
+    hasfound = msgf.linear
+
+def attcallback(msga):    
     global isAttacked
-    hasfound = msg.linear
-    isAttacked = msg.angular
+    isAttacked = msga.angular
 
 
 
@@ -41,7 +43,8 @@ class Cruise(smach.State):
 
         while not rospy.is_shutdown():
             
-            rospy.Subscriber('has_info', Has, callback)
+            rospy.Subscriber('found_info', Has, foundcallback)
+            rospy.Subscriber('att_info', Has, attcallback)
             if (isAttacked == 1 and hasfound == 1) or (isAttacked == 1 and hasfound == 0):
                 break
             if isAttacked == 0 and hasfound == 1:
@@ -78,8 +81,9 @@ class Defend(smach.State):
         rate = rospy.Rate(1)
 
         while not rospy.is_shutdown():
-            
-            rospy.Subscriber('has_info', Has, callback)
+
+            rospy.Subscriber('found_info', Has, foundcallback)
+            rospy.Subscriber('att_info', Has, attcallback)
             if isAttacked == 1:self.safeCounter = 0
 
             if isAttacked == 0 and hasfound == 0 and self.safeCounter == SAFECOUNT:
@@ -117,7 +121,8 @@ class Attack(smach.State):
 
         while not rospy.is_shutdown():
             
-            rospy.Subscriber('has_info', Has, callback)
+            rospy.Subscriber('found_info', Has, foundcallback)
+            rospy.Subscriber('att_info', Has, attcallback)
             if (isAttacked == 1 and hasfound == 0) or (isAttacked == 1 and hasfound == 1):               
                 break
             elif isAttacked == 0 and hasfound == 0:               

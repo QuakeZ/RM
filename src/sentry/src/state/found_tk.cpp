@@ -20,12 +20,12 @@ int main(int argc, char **argv)
 {
       ros::init(argc, argv, "found_tk");
       ros::NodeHandle n;
-      ros::Publisher haspub = n.advertise <sentry::Has>("has_info", 1);
+      ros::Publisher haspub = n.advertise <sentry::Has>("found_info", 1);
       ros::Subscriber sub = n.subscribe("point2d",1,pointCallback);
       ros::Subscriber subpri = n.subscribe("has_pri",1,priCallback);
       ros::Rate rate(1);
       sentry::Has hasmsg;
-      while(key_pri==0)
+      while(ros::ok())
      {
         ros::spinOnce();
         if (foundflag == 1)

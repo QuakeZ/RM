@@ -22,20 +22,22 @@ private:
   
   ros::NodeHandle nh_;
   int linear, angular, l_scale_, a_scale_;
-  ros::Publisher has_pub_;
+  ros::Publisher found_pub_;
+  ros::Publisher att_pub_;
   
 };
 
 TeleopTurtle::TeleopTurtle():
-  linear(1),
-  angular(1),
+  linear(0),
+  angular(0),
   l_scale_(1),
   a_scale_(1)
 {
   nh_.param("scale_angular", a_scale_, a_scale_);
   nh_.param("scale_linear", l_scale_, l_scale_);
 
-  has_pub_ = nh_.advertise<sentry::Has>("has_info", 1);//发布的消息 固定格式
+  found_pub_ = nh_.advertise<sentry::Has>("found_info", 1);//发布的消息 固定格式
+  att_pub_ = nh_.advertise<sentry::Has>("att_info", 1);
 }
 
 int kfd = 0;//定义 kfd 作用：文件描述符
@@ -129,12 +131,14 @@ void TeleopTurtle::keyLoop()//定义 用于键盘控制的函数
     }
    
 
-    sentry::Has mss;//定义速度消息
-    mss.angular=angular;//设置 角速度信息
-    mss.linear=linear;//设置 线速度信息
+    sentry::Has mss;//
+    mss.linear=linear;//
+    sentry::Has mgg;
+    mgg.angular=angular;
     if(dirty == true)//dirty开启则 发布信息 然后dirty关闭
     {
-      has_pub_.publish(mss);//发布消息  
+      found_pub_.publish(mss);//发布消息
+      att_pub_.publish(mgg);  
       dirty=false;//发布后关闭消息
     }
   }

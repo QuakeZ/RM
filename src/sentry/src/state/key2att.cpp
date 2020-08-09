@@ -35,7 +35,7 @@ TeleopTurtle::TeleopTurtle():  //这里的格式？
   nh_.param("scale_angular", a_scale_, a_scale_);//“参数名”，参数值，默认值 作用？
   nh_.param("scale_linear", l_scale_, l_scale_);
 
-  has_pub_ = nh_.advertise<sentry::Has>("has_info", 1);//发布的消息 固定格式
+  has_pub_ = nh_.advertise<sentry::Has>("att_info", 1);//发布的消息 固定格式
 }
 
 int kfd = 0;//定义 kfd 作用：文件描述符
