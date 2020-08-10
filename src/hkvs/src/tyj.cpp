@@ -47,7 +47,7 @@ public:
     {
         //设置订阅摄像机
 
-        image_sub_ = it_.subscribe("camera/image_raw", 1, &ImageConverter::imageCalllback, this);
+        image_sub_ = it_.subscribe("/hkvs_cam/image_raw", 1, &ImageConverter::imageCalllback, this);
     }
 
     ~ImageConverter(){
