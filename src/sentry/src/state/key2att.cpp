@@ -27,8 +27,8 @@ private:
 };
 
 TeleopTurtle::TeleopTurtle():  //这里的格式？
-  linear(1),
-  angular(1),
+  linear(0),
+  angular(0),
   l_scale_(1),//线速度
   a_scale_(1)//角速度
 {
