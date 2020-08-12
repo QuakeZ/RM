@@ -68,9 +68,9 @@ public:
         image_process(frame);
     }
     void image_process(cv::Mat frame){
-            imshow("original",frame);
-            vector<RotatedRect> contours_minRects;//所有轮廓的最小外接矩形
-            vector<Rect> contoursRects;//所有轮廓的外接矩形
+            //imshow("original",frame);
+            ///vector<RotatedRect> contours_minRects;//所有轮廓的最小外接矩形
+            //vector<Rect> contoursRects;//所有轮廓的外接矩形
             vector<vector<Point> > contours;//所有灯轮廓
         clock_t start,finish;
         double totaltime;
@@ -80,7 +80,7 @@ public:
         int stateNum = 4;
         int measureNum = 2;
         frame.copyTo(binary1);
-        KalmanFilter KF(stateNum, measureNum, 0);
+        /*KalmanFilter KF(stateNum, measureNum, 0);
         //Mat processNoise(stateNum, 1, CV_32F);
         Mat measurement = Mat::zeros(measureNum, 1, CV_32F);
         KF.transitionMatrix = (Mat_<float>(stateNum, stateNum) << 1, 0, 1, 0,//A 状态转移矩阵
@@ -92,7 +92,7 @@ public:
         setIdentity(KF.processNoiseCov, Scalar::all(1e-5));//Q高斯白噪声，单位阵
         setIdentity(KF.measurementNoiseCov, Scalar::all(1e-1));//R高斯白噪声，单位阵
         setIdentity(KF.errorCovPost, Scalar::all(1));//P后验误差估计协方差矩阵，初始化为单位阵
-        randn(KF.statePost, Scalar::all(0), Scalar::all(0.1));//初始化状态为随机值
+        randn(KF.statePost, Scalar::all(0), Scalar::all(0.1));//初始化状态为随机值*/
 
             Mat thres_whole;//,inputafter;
             vector<Mat> splited;
@@ -159,6 +159,7 @@ public:
                         pointsA = contours[j];
 
                         RotatedRect rrectA = fitEllipse(pointsA);
+                        pointsA.clear();
 
                         float aimA = rrectA.size.height/rrectA.size.width;
                         //if(aimA > 2.0)continue;
@@ -180,11 +181,11 @@ public:
 
 
                         //cv::circle(binary1,Point((rrect.center.x+rrectA.center.x)/2,(rrect.center.y+rrectA.center.y)/2),15,cv::Scalar(0,0,255),4);
-                        Mat prediction = KF.predict();
-                        Point predict_pt = Point((int)prediction.at<float>(0), (int)prediction.at<float>(1));
-                        measurement.at<float>(0) = (float)rrect.center.x;
-                        measurement.at<float>(1) = (float)rrect.center.y;
-                        KF.correct(measurement);
+                        //Mat prediction = KF.predict();
+                        //Point predict_pt = Point((int)prediction.at<float>(0), (int)prediction.at<float>(1));
+                        //measurement.at<float>(0) = (float)rrect.center.x;
+                        //measurement.at<float>(1) = (float)rrect.center.y;
+                        //KF.correct(measurement);
 
                         int a1 = rrect.center.x-0.5*rrect.size.width;
                         int a2 = rrect.center.y-0.5*rrect.size.height;
@@ -199,7 +200,7 @@ public:
                         int point_x=(rrect.center.x+rrectA.center.x)/2;                 
                         //cout<<"point_x="<<point_x<<endl;
                         x_bias=820-point_x;
-                        cout<<"x_bias="<<x_bias<<endl;
+                        //cout<<"x_bias="<<x_bias<<endl;
                         linear_old=x_bias*x_k;
                         //cout<<"linear_x_old="<<linear_old<<endl;   
 
@@ -210,9 +211,9 @@ public:
                             linear_old=-60;
                         }
                         linear_x=linear_old*10000;
-                        vel_linear.vel = linear_x; 
+                        vel_linear.vel = -linear_x; 
 
-                        velpub.publish(vel_linear);
+                        velpub.publish(vel_linear);///////////
                         //cout<<"linear_0="<<linear_x<<endl;
                         Rect r(a1,a2,b1-a1,c2-a2); 
                         //cout<<"size="<<(b1-a1)*(c2-a2)<<endl;
@@ -226,11 +227,11 @@ public:
                         //squared.zx_x=c1;squared.zx_y=1080-c2;cout<<"youshang"<<squared.zx_x<<".."<<squared.zx_y<<endl;
 
                         //squared.yx_x=d1;squared.yx_y=1080-d2;cout<<"youxia"<<squared.yx_x<<".."<<squared.yx_y<<endl;
-                        squared.square_num=1;
-                        squarepub.publish(squared);
+                        //squared.square_num=1;
+                        //squarepub.publish(squared);
 
-                        rrect.center.x = (int)prediction.at<float>(0);
-                        rrect.center.y = (int)prediction.at<float>(1);
+                        //rrect.center.x = (int)prediction.at<float>(0);
+                        //rrect.center.y = (int)prediction.at<float>(1);
 
 
                     }
@@ -241,14 +242,19 @@ public:
                              cout<<"linear_1="<<linear_x<<endl;
                             velpub.publish(vel_linear);
                         }*/
+
                 }
             //}
-            imshow("frame",binary1); 
+            //imshow("frame",binary1);
             waitKey(1);
 
-            finish = clock();
-            totaltime=(double)(finish-start)/CLOCKS_PER_SEC;
+            //finish = clock();
+            //totaltime=(double)(finish-start)/CLOCKS_PER_SEC;
             //cout<<"Time whole"<<totaltime<<"秒"<<endl;
+                //vector<Point>().swap(pointsA);
+                //vector<Point>().swap(points);
+
+                points.clear();
 
         
     }
