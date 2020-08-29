@@ -137,7 +137,7 @@ public:
                 RotatedRect rrect = fitEllipse(points);
                 cv::Point2f* vertices = new cv::Point2f[4];
                 rrect.points(vertices);
-
+		delete []vertices;
                 //float aim = rrect.size.height/rrect.size.width;
 
                 //if(aim > 1.8&& aim < 2.6){
@@ -227,8 +227,8 @@ public:
                         //squared.zx_x=c1;squared.zx_y=1080-c2;cout<<"youshang"<<squared.zx_x<<".."<<squared.zx_y<<endl;
 
                         //squared.yx_x=d1;squared.yx_y=1080-d2;cout<<"youxia"<<squared.yx_x<<".."<<squared.yx_y<<endl;
-                        //squared.square_num=1;
-                        //squarepub.publish(squared);
+                        squared.square_num=1;
+                        squarepub.publish(squared);
 
                         //rrect.center.x = (int)prediction.at<float>(0);
                         //rrect.center.y = (int)prediction.at<float>(1);

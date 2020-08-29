@@ -92,6 +92,7 @@ def vel_callback(twist):
 
 
 rospy.init_node('port_node', anonymous=True)
+rospy.Subscriber("vel_linear",vel, callback1)
 rospy.Subscriber('chassis_cmd_vel', Twist, vel_callback)
 rospy.Subscriber("schemaTranslation",String, callback2)
 rospy.Subscriber('order_PanTilt', Int8, ordercallback)
@@ -112,6 +113,7 @@ while not rospy.is_shutdown():
         None
 
 send_command(0,0,0)
+send_gimbal(0)
 send_state_order(0)
 ser.close
 

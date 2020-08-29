@@ -5,12 +5,13 @@
 	<master auto="start"/>
 
 	<!-- run "hkvs_pub -->
-	<node pkg="hkvs" type="hkvs_pub" name="hkvs_pub" />
+	<node pkg="hkvs_cam" type="hkvs_cam_node" name="hkvs_cam_node" output="screen" />
+
 	<!--run tyj-->
 	<node pkg="hkvs" type="tyj" name="tyj" />
 	
 	<!--run serialfirst-->
-	<node name="serialfirst" pkg="hkvs" type="serialfirst.py" />	
+	<!--node name="serialfirst" pkg="hkvs" type="serialfirst.py" /-->	
 	
 
 </launch>

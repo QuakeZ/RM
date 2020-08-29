@@ -33,8 +33,8 @@ class Search(smach.State):
             rospy.Subscriber('found_info', Has, callback)
             pub.publish(order)
             if hasfound == 1:
-               order = 0
-               pub.publish(order)
+               #order = 0
+               #pub.publish(order)
                break
             global counter
             rospy.loginfo(counter)
@@ -57,8 +57,8 @@ class Attack(smach.State):
             rospy.Subscriber('found_info', Has, callback)
             pub.publish(order)
             if hasfound == 0:
-               order = 0
-               pub.publish(order)
+               #order = 0
+               #pub.publish(order)
                break
             global counter
             rospy.loginfo(counter)
