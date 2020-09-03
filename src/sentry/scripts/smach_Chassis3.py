@@ -12,7 +12,7 @@ isAttacked = 0
 global counter
 counter = 1
 
-SAFECOUNT=5
+SAFECOUNT=5*50
 
 pub = rospy.Publisher('order_Chassis', Int8, queue_size=10)
 
@@ -38,19 +38,21 @@ class Cruise(smach.State):
         rospy.loginfo('isAttacked == %d hasfound == %d',isAttacked,hasfound)
         order = 1
         pub.publish(order)
-        rospy.loginfo('publish order:%d',order)
-        rate = rospy.Rate(1)
-
+        rospy.loginfo('publish Order:%d',order)
+        rate = rospy.Rate(50)
+        rospy.Subscriber('found_info', Has, foundcallback)
+        rospy.Subscriber('att_info', Has, attcallback)
         while not rospy.is_shutdown():
             
-            rospy.Subscriber('found_info', Has, foundcallback)
-            rospy.Subscriber('att_info', Has, attcallback)
+
             if (isAttacked == 1 and hasfound == 1) or (isAttacked == 1 and hasfound == 0):
                 break
             if isAttacked == 0 and hasfound == 1:
                 break
             global counter
-            rospy.loginfo(counter)
+            #rospy.loginfo(counter)
+            if counter % 50 == 0:
+                rospy.loginfo("%d",counter/50)
             counter+=1
             rate.sleep()
 
@@ -78,12 +80,11 @@ class Defend(smach.State):
         pub.publish(order)
         rospy.loginfo('publish order:%d',order)
         self.safeCounter = 1
-        rate = rospy.Rate(1)
-
+        rate = rospy.Rate(50)
+        rospy.Subscriber('found_info', Has, foundcallback)
+        rospy.Subscriber('att_info', Has, attcallback)
         while not rospy.is_shutdown():
 
-            rospy.Subscriber('found_info', Has, foundcallback)
-            rospy.Subscriber('att_info', Has, attcallback)
             if isAttacked == 1:self.safeCounter = 0
 
             if isAttacked == 0 and hasfound == 0 and self.safeCounter == SAFECOUNT:
@@ -117,12 +118,11 @@ class Attack(smach.State):
         order = 3
         pub.publish(order)
         rospy.loginfo('publish order:%d',order)
-        rate = rospy.Rate(1)
-
+        rate = rospy.Rate(50)
+        rospy.Subscriber('found_info', Has, foundcallback)
+        rospy.Subscriber('att_info', Has, attcallback)
         while not rospy.is_shutdown():
-            
-            rospy.Subscriber('found_info', Has, foundcallback)
-            rospy.Subscriber('att_info', Has, attcallback)
+
             if (isAttacked == 1 and hasfound == 0) or (isAttacked == 1 and hasfound == 1):               
                 break
             elif isAttacked == 0 and hasfound == 0:               

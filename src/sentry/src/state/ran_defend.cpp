@@ -1,6 +1,5 @@
 #include <boost/bind.hpp>
 #include <ros/ros.h>
-//#include <turtlesim/Pose.h>
 #include <geometry_msgs/Twist.h>
 #include <std_msgs/Int8.h>
 #include <turtlesim/Pose.h>
@@ -40,7 +39,7 @@ float gate_2 = 0.3;//同理
 
 bool fist_goal_set = false;
 int STart = 0;//开关：是否启动随机运动模式
-int burst = 0;//开关：是否进入暴走模式
+int Burst = 0;//开关：是否进入暴走模式
 
 void poseCallback(const turtlesim::PoseConstPtr& pose)
 {
@@ -146,7 +145,7 @@ void timerCallback(const ros::TimerEvent&, ros::Publisher vel_pub)
 
 	if (STart == 2)
         {
-	   if(burst == 1)//判断是否接收到要进入暴走模式的指令  //还缺少一个接收者和发布者
+	   if(Burst == 1)//判断是否接收到要进入暴走模式的指令  
 	   {	
 		set_speed = set_speed*burst_x;
 		if(out_energy())
@@ -161,7 +160,7 @@ void timerCallback(const ros::TimerEvent&, ros::Publisher vel_pub)
 			commandTurtle(vel_pub,set_speed*100);//发布处2
 		}
    	   }	
-	   else if(burst == 0)
+	   else if(Burst == 0)
 	   {
 		//set_speed *=100;
 		commandTurtle(vel_pub,set_speed*100);  //发布处3。
@@ -171,10 +170,16 @@ void timerCallback(const ros::TimerEvent&, ros::Publisher vel_pub)
 
 }
 
-void STart__Callback(const std_msgs::Int8ConstPtr& xiaoming)//缺少接受的消息类型
+void STart__Callback(const std_msgs::Int8ConstPtr& xiaoming)
 {
 	STart = xiaoming->data;
 	//ROS_INFO("[%d]",STart);
+}
+
+void Burst__Callback(const std_msgs::Int8ConstPtr& xiaohua)
+{
+	Burst = xiaohua->data;
+	//ROS_INFO("[%d]",Burst);
 }
 
 int main(int argc, char *argv[])
